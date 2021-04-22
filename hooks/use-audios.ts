@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { storage } from "../components/firebase";
 
 export const useAudios = () => {
-  const [audios, setAudios] = useState<firebase.storage.Reference[]>([]);
+  const [audios, setAudios] = useState([]);
 
   const storageRef = storage.ref();
 
