@@ -11,33 +11,35 @@ export default function Home() {
   return (
     <div className="h-screen home">
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Yulify</title>
+        <link rel="icon" href="/yulify.png" />
       </Head>
 
-      <main className="flex flex-col items-center h-full p-4 overflow-auto bg-green-600 md:p-6 bg-opacity-40">
-        <h5 className="text-2xl text-green-900 md:text-6xl">El Yul1@n</h5>
+      <div className="fixed bottom-0 left-0 w-full">
+        <AudioPlayer
+          src={selectedAudio?.url}
+          header={
+            <div>
+              <h3 className="p-2 break-words">{selectedAudio?.name ?? " - "}</h3>
+            </div>
+          }
+        />
+      </div>
+      <main className="flex flex-col items-center h-full p-4 overflow-auto bg-green-200 md:p-6 bg-opacity-40">
+        <h5 className="text-3xl font-black text-green-900 md:text-6xl">Yulify</h5>
         <h3 className="text-lg text-green-900 md:text-xl">Contala como quieras</h3>
         {audios.length ? (
-          <div className="flex flex-col w-full md:flex-row md:flex-wrap md:m-4">
-            <AudioPlayer
-              src={selectedAudio?.url}
-              header={
-                <div>
-                  <h3 className="p-2 break-words">{selectedAudio?.name ?? " - "}</h3>
-                </div>
-              }
-            />
+          <div className="flex flex-col w-full m-2 md:flex-row md:flex-wrap md:m-4">
             {audios.map((a) => (
               <div
                 key={a.name}
-                className="flex-1 p-4 m-2 cursor-pointer bg-green-50"
+                className="flex-1 p-4 m-2 break-words bg-green-200 cursor-pointer hover:bg-green-400"
                 onClick={async () => {
                   let url = await a.getDownloadURL();
-                  setSelectedAudio({ name: a.name, url });
+                  setSelectedAudio({ name: a.name.split(".")[0], url });
                 }}
               >
-                {a.name}
+                {a.name.split(".")[0]}
               </div>
             ))}
           </div>
