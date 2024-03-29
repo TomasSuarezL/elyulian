@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { storage, database } from "../components/firebase";
+import { databaseRef, storageRef } from "../components/firebase";
+import { getDownloadURL, listAll } from "firebase/storage";
+import { child, get, onValue, set } from "firebase/database";
 
 interface AudioDB {
   [key: string]: Audio;
@@ -14,17 +16,14 @@ export interface Audio {
 export const useAudios = () => {
   const [audios, setAudios] = useState<Audio[]>([]);
 
-  const storageRef = storage.ref();
-  const databaseRef = database.ref("audios");
-
   useEffect(() => {
     const getStorageAudios = async () => {
-      let response = await storageRef.listAll();
+      let response = await listAll(storageRef);
       return response.items;
     };
 
     const getDatabaseAudios = async () => {
-      const audiosDB = await databaseRef.once("value");
+      const audiosDB = await get(databaseRef);
       return audiosDB.val() ?? {};
     };
 
@@ -34,8 +33,9 @@ export const useAudios = () => {
 
       for (let audio of fromStorage) {
         if (!fromDB[audio.name.replace(".ogg", "")]) {
-          const url = await audio.getDownloadURL();
-          database.ref("audios/" + audio.name.replace(".ogg", "")).set({
+          const url = await getDownloadURL(audio);
+
+          set(child(databaseRef, "audios/" + audio.name.replace(".ogg", "")), {
             name: audio.name,
             url,
             reproductions: 0,
@@ -47,9 +47,8 @@ export const useAudios = () => {
 
     syncAudios();
 
-    databaseRef.on("value", (snapshot) => {
+    onValue(databaseRef, (snapshot) => {
       const data: AudioDB = snapshot.val();
-      console.log("data: ", data);
       const audioArray = Object.values(data).sort((a, b) => {
         const totalInteractionsOfA = a.downloads + a.reproductions;
         const totalInteractionsOfB = b.downloads + b.reproductions;

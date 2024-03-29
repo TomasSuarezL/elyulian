@@ -1,6 +1,6 @@
-import firebase from "firebase/app";
-import "firebase/storage";
-import "firebase/database";
+import { initializeApp } from "firebase/app";
+import { getStorage, ref as stRef } from "firebase/storage";
+import { getDatabase, ref as dbRef } from "firebase/database";
 
 var firebaseConfig = {
   apiKey: "AIzaSyADYVf31hhtXxHhXyMVQWITKAQNNu49S-E",
@@ -12,10 +12,10 @@ var firebaseConfig = {
   appId: "1:759260397926:web:2b99f367496e64e601c8a7",
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+const app =initializeApp(firebaseConfig);
 
-export const storage = firebase.storage();
+const storage = getStorage(app);
+export const storageRef = stRef(storage);
 
-export const database = firebase.database();
+const database = getDatabase(app);
+export const databaseRef = dbRef(database, "audios");
