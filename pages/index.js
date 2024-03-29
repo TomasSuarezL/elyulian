@@ -71,9 +71,10 @@ export default function Home() {
                           const response = await fetch(url);
                           let blob = await response.blob();
                           fileDownload(blob, name);
-                          database
-                            .ref("audios/" + nameWithoutExtension)
-                            .update({ ...a, downloads: downloads + 1 });
+                          update(child(databaseRef, nameWithoutExtension), {
+                            ...a,
+                            downloads: downloads + 1,
+                          });
                         } catch (e) {
                           console.error(e.message);
                         }
