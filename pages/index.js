@@ -4,7 +4,7 @@ import Head from "next/head";
 import AudioPlayer from "react-h5-audio-player";
 import { HiDownload } from "react-icons/hi";
 import { useAudios } from "../hooks/use-audios";
-import { database, databaseRef } from "../components/firebase";
+import { databaseRef } from "../components/firebase";
 import fileDownload from "js-file-download";
 import { child, update } from "firebase/database";
 

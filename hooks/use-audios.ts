@@ -35,7 +35,7 @@ export const useAudios = () => {
         if (!fromDB[audio.name.replace(".ogg", "")]) {
           const url = await getDownloadURL(audio);
 
-          set(child(databaseRef, "audios/" + audio.name.replace(".ogg", "")), {
+          set(child(databaseRef, audio.name.replace(".ogg", "")), {
             name: audio.name,
             url,
             reproductions: 0,
